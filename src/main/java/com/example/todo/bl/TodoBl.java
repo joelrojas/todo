@@ -7,7 +7,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
@@ -39,15 +38,12 @@ public class TodoBl {
     @Transactional
     public TodoEntity saveTodo(TodoDto todoDto) {
         LOGGER.info("BUSINESS-LOGIC: Iniciando consulta para registrar un todo's");
-        TodoEntity todoEntity = new TodoEntity(todoDto.getId(), todoDto.getDescription(),
-                new Date(), null, 1);
+        TodoEntity todoEntity = new TodoEntity(
+                todoDto.getDescription(),
+                new Date(),
+                null,
+                1);
         TodoEntity todo = this.todoRepository.saveAndFlush(todoEntity);
-        try {
-            Thread.sleep(10000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-//        throw new RuntimeException("ERROR");
         LOGGER.info("BUSINESS-LOGIC: La consulta para registrar un todo's retorno: {}", todo);
         return todo;
     }

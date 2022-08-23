@@ -1,20 +1,21 @@
 package com.example.todo.dao;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import javax.persistence.*;
 import java.util.Date;
 
 @Table(name = "todo")
 @Entity
 public class TodoEntity {
     @Id
+    @GeneratedValue
     @Column
     private Integer id;
     @Column
     private String description;
     @Column
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy HH:mm:ss", timezone = "GMT-4:00")
     private Date createdAt;
     @Column
     private Date updatedAt;

@@ -1,0 +1,10 @@
+### OBTENIENDO TODOS LOS TODOS
+GET http://localhost:8080/v1/api/todo
+
+### GUARDANDO TODO
+POST http://localhost:8080/v1/api/todo
+Content-Type: application/json
+
+{
+  "description": "hacer formulario"
+}
