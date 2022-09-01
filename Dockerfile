@@ -7,5 +7,5 @@ RUN chmod +x /wait-for-it.sh
 ENV DATABASE_NAME "test"
 ENV PASSWORD "my-secret-pw"
 ENV USERNAME "root"
-ENV IP "localhost"
+ENV  v "localhost"
 ENTRYPOINT ["./wait-for-it.sh","mysql:3306","--","java","-jar","/todo-1.0.3.jar"]

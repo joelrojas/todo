@@ -8,3 +8,17 @@ Content-Type: application/json
 {
   "description": "hacer formulario"
 }
+
+### ACTUALIZANDO TODO
+PUT http://localhost:8080/v1/api/todo
+Content-Type: application/json
+
+{
+  "id": 23,
+  "description": "hacer formulario"
+}
+
+
+
+### OBTENIENDO TODOS LOS TODOS
+GET http://localhost:8080/v1/api/todo/pagination?page=20&size=100

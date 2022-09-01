@@ -6,6 +6,7 @@ import com.example.todo.dto.TodoDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -52,4 +53,21 @@ public class TodoController {
         TodoEntity result = todoBl.updateTodo(todoDto);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
+
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    public ResponseEntity<TodoEntity> deleteTodo(@PathVariable Integer id) {
+        LOGGER.info("REQUEST: Iniciando petición para eliminar un TODO");
+        TodoEntity result = todoBl.deleteTodo(id);
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "pagination", method = RequestMethod.GET)
+    public ResponseEntity<PageImpl<TodoEntity>> getTodosWithPagination(
+        @RequestParam Integer page,
+        @RequestParam Integer size) {
+        LOGGER.info("REQUEST: Iniciando petición para obtener el listado de TODO's paginados");
+        PageImpl<TodoEntity> result = todoBl.getTodosWithPagination(page, size);
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
 }
