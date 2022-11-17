@@ -1,5 +1,7 @@
 ### OBTENIENDO TODOS LOS TODOS
 GET http://localhost:8080/v1/api/todo
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJqdGkiOiJCQUNLRU5EVE9ETyIsInN1YiI6InNvZnR3YXJlIiwiYXV0aG9yaXRpZXMiOlsiUk9MRV9VU0VSIl0sImlhdCI6MTY2MjQxNTYwMywiZXhwIjoxNjYyNDE2MjAzfQ.HVx6t2wgHneBjTIWQmm2tQU_RixhT3TgflGUFuDTQQvJbbvQwxngyFcksmFmWBgSLCyYDeq0BdZGbVhLFPdypg
+
 
 ### GUARDANDO TODO
 POST http://localhost:8080/v1/api/todo
@@ -22,3 +24,15 @@ Content-Type: application/json
 
 ### OBTENIENDO TODOS LOS TODOS
 GET http://localhost:8080/v1/api/todo/pagination?page=20&size=100
+
+
+### OBTENIENDO TODOS LOS TODOS
+GET http://localhost:8080/v1/api/todo/token?username=software
+
+######
+POST http://localhost:8080/v1/api/todo/producer
+Content-Type: application/json
+
+{
+  "message": "error"
+}

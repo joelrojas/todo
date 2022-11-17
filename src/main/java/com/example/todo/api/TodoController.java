@@ -1,17 +1,23 @@
 package com.example.todo.api;
 
 import com.example.todo.bl.TodoBl;
+import com.example.todo.config.RabbitMqConfig;
 import com.example.todo.dao.TodoEntity;
+import com.example.todo.dto.MessageDto;
 import com.example.todo.dto.TodoDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.amqp.core.Message;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @CrossOrigin(origins = {"http://localhost:4200", "http://localhost"})
 @RestController
@@ -20,6 +26,9 @@ public class TodoController {
     private static Logger LOGGER = LoggerFactory.getLogger(TodoController.class);
 
     private TodoBl todoBl;
+
+    @Autowired
+    RabbitTemplate rabbitTemplate;
 
     @Autowired
     public TodoController(TodoBl todoBl) {
@@ -70,4 +79,21 @@ public class TodoController {
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
+    @RequestMapping(value = "token", method = RequestMethod.GET)
+    public ResponseEntity<String> token(@RequestParam String username) {
+        LOGGER.info("REQUEST: Iniciando petición para generar token JWT");
+        String result = todoBl.token(username);
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    @RequestMapping(method = RequestMethod.POST, value = "producer")
+    public ResponseEntity<String> producerMessage(@RequestBody MessageDto messageDto) {
+        LOGGER.info("REQUEST: Iniciando petición para enviar un mensaje al rabbitmq");
+        messageDto.setDate(new Date());
+        messageDto.setId(UUID.randomUUID().toString());
+        rabbitTemplate.convertAndSend(RabbitMqConfig.EXCHANGE, RabbitMqConfig.ROUTING_KEY, messageDto);
+//        TodoEntity result = todoBl.producerMessage(messageDto);
+        String result = "Mensaje enviado";
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
 }

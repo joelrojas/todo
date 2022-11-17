@@ -3,13 +3,18 @@ package com.example.todo.bl;
 import com.example.todo.dao.TodoEntity;
 import com.example.todo.dao.repository.TodoRepository;
 import com.example.todo.dto.TodoDto;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.security.Key;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -84,5 +89,23 @@ public class TodoBl {
                 .collect(Collectors.toList());
         LOGGER.info("BUSINESS-LOGIC: La consulta para obtener el listado de todo's retorno: {}", todoList);
         return new PageImpl<>(todoList, pageable, todoPageable.getTotalElements());
+    }
+
+    public String token(String username) {
+        String secretkey = "mySecretKey";
+        List<GrantedAuthority> authorities = AuthorityUtils
+                .commaSeparatedStringToAuthorityList("ROLE_USER");
+        String jwt = Jwts.builder()
+                .setId("BACKENDTODO")
+                .setSubject(username)
+                .claim("authorities", authorities.stream()
+                        .map(GrantedAuthority::getAuthority)
+                        .collect(Collectors.toList()))
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + 600000))
+                .signWith(SignatureAlgorithm.HS512, secretkey.getBytes())
+                .compact();
+        LOGGER.info("JWT CREADO: {}", jwt);
+        return jwt;
     }
 }
